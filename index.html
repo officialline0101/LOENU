@@ -426,9 +426,9 @@
 
         #treatment-text {
             background-color: #eef9f5;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 1px;
+            padding: 0px;
+            border-radius: 0px;
+            margin-top: 0px;
         }
 
         .highlight-background {
@@ -743,7 +743,7 @@
             font-size: 16px;
             font-weight: bold;
             padding: 12px 16px;
-            background-color: #00b08b;
+            background-color: #16b7d2;
             color: #ffffff;
             border: 1px solid #c8e6c9;
             border-radius: 8px;
@@ -933,6 +933,9 @@
             <button type="button" onclick="showMenu('KidsHairRemoval')">キッズ脱毛</button>
             <button type="button" onclick="showMenu('KidsBrowLift')">キッズブロウリフト</button>
         </div>
+
+<!-- メニュー表示エリア（選択されたメニュー名がここに出る） -->
+<div id="selected-menus-display" style="display: none; font-weight: bold; margin-top: 10px;"></div>
 
         <div id="treatment-text" style="display: none; margin-bottom: 10px;"></div>
 
@@ -1165,7 +1168,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             liff.init({
-                liffId: '2005254357-zKma9BZk'
+                liffId: '2007710375-ynwp3bW0'
             }).then(() => {
                 console.log('LIFF初期化成功');
             }).catch((err) => {
@@ -1429,24 +1432,10 @@
             // カレンダーを更新するために取得する日付を渡す
             fetchAvailability(currentDate);
 
-            if (treatmentId === 'treatment1') {
+            if (treatmentId === 'treatment111') {
                 treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：90分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：6,500円<br>初診料：＋2,200円</strong></div>`;
-            } else if (treatmentId === 'treatment2') {
+            } else if (treatmentId === 'treatment211') {
                 treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：60分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：4,500円<br>初診料：＋2,200円</strong></div>`;
-            } else if (treatmentId === 'treatment3') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：120分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：8,700円<br>初診料：＋2,200円</strong></div>`;
-            } else if (treatmentId === 'treatment4') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：30分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：1,700円<br>初診料：＋2,200円</strong></div>`;
-            } else if (treatmentId === 'treatment5') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：60分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：6,500円</strong></div>`;
-            } else if (treatmentId === 'treatment6') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：30分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：4,500円</strong></div>`;
-            } else if (treatmentId === 'treatment7') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：90分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：8,700円</strong></div>`;
-            } else if (treatmentId === 'treatment8') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：15分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：1,700円</strong></div>`;
-            } else if (treatmentId === 'treatment9') {
-                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：15分</strong><br>※症状によりお時間が前後する場合がございます</div><div style="text-align: right;"><strong>料金：1,700円</strong></div>`;
             } else {
                 treatmentText.innerHTML = '';
             }
@@ -1698,12 +1687,14 @@
                 ? formData.selectedSymptom.map(item => `${item.name}`).join(',')
                 : 'メニュー未選択';
 
-            // irradiationsCountの整形（nullチェック）
-            const irradiationsText = formData.irradiationsCount || 'なし';
+    // irradiationsTextが存在する場合のみメッセージに追加
+    const irradiationsText = formData.irradiationsCount
+        ? `,${formData.irradiationsCount}`
+        : '';
 
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nコース：${formData.selectedMenu}\nメニュー：\n${selectedSymptomText},${irradiationsText}\n希望日時：\n${formData.dates[0]}\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nコース：${formData.selectedMenu}\nメニュー：${selectedSymptomText}${irradiationsText}\n希望日時：\n${formData.dates[0]}\nメッセージ：${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('当日キャンセルは無いようにお願いいたします。');
@@ -1735,7 +1726,7 @@
                 return;
             }
 
-            const url = 'https://script.google.com/macros/s/AKfycbwCxnJaxGZ46c3TnnesuZcD_zuxuVoSHoDHo5MxkRzChcK5vZDwBs4HstzkXO-KLyuDYA/exec' +
+            const url = 'https://script.google.com/macros/s/AKfycbzBN4s2W1tsiIi4BZ_hnESs7tcYfEgkRRikS7hQnLJrLM6OJvZ9iSQ1NwzHaxrBMp0f/exec' +
                 `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
 
             try {
