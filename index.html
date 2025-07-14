@@ -1838,6 +1838,13 @@
                         continue;
                     }
 
+        // 18時以降に終了する予約は✕
+        if (slotEnd.getHours() === 18 && slotEnd.getMinutes() > 0 || slotEnd.getHours() > 18) {
+            cell.textContent = '✕';
+            cell.classList.add('unavailable');
+            continue;
+        }
+
                     // ここで終了時間を使った条件処理を行う
                     // 例えば、リアルタイムで既に過ぎた時間帯は×にする
                     if (slotStart < now) {
